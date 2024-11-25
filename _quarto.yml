@@ -1,0 +1,17 @@
+project:
+  type: website
+
+website:
+  title: "Draft6_final3_rev_final.docx"
+  navbar:
+    right:
+      - text: "About"
+        href: "https://elrobin.github.io/"
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+
+editor: visual
+
