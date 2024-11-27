@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Draft6_final3_rev_final.docx",
     "section": "",
-    "text": "More on multiauthorship\n\n\n\n\n\n\nreviews\n\n\n\n\n\n\n\n\n\nNov 26, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\n\n\n\n\n\n\nScientific authorship and dealing with multiauthorship\n\n\n\n\n\n\nreviews\n\n\n\n\n\n\n\n\n\nNov 25, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\n\n\n\n\n\n\nHello world\n\n\n\n\n\n\ngibberish\n\n\n\n\n\n\n\n\n\nNov 24, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\nNo matching items"
+    "text": "Downloading data from Scopus API\n\n\n\n\n\n\ncoding\n\n\n\n\n\n\n\n\n\nNov 27, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\n\n\n\n\n\n\nMore on multiauthorship\n\n\n\n\n\n\nreviews\n\n\n\n\n\n\n\n\n\nNov 26, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\n\n\n\n\n\n\nScientific authorship and dealing with multiauthorship\n\n\n\n\n\n\nreviews\n\n\n\n\n\n\n\n\n\nNov 25, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\n\n\n\n\n\n\nHello world\n\n\n\n\n\n\ngibberish\n\n\n\n\n\n\n\n\n\nNov 24, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/26-11-2024/index.html",
@@ -33,5 +33,47 @@
     "title": "Hello world",
     "section": "",
     "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  },
+  {
+    "objectID": "posts/27-11-2024/index.html",
+    "href": "posts/27-11-2024/index.html",
+    "title": "Downloading data from Scopus API",
+    "section": "",
+    "text": "This is a small tutorial on how to work with the Scopus API using R. Most bibliographic databases allow nowadays downloading bibliographic data through their API in an automated way if you are registered and have an institutional subscription. In many cases, they lack of a good documentation, this is not the case for Elsevier, who have quite a lot of info on how to work with their data."
+  },
+  {
+    "objectID": "posts/27-11-2024/index.html#step-1.-setup-api-access",
+    "href": "posts/27-11-2024/index.html#step-1.-setup-api-access",
+    "title": "Downloading data from Scopus API",
+    "section": "Step 1. Setup API Access",
+    "text": "Step 1. Setup API Access\nFirst thing you need to do is to go to the Elsevier Developers Portal and request an API Key.\n\nWhen you request a key, it asks you to access through your institutional account and will register an API key under your profile."
+  },
+  {
+    "objectID": "posts/27-11-2024/index.html#step-2.-environment-setup",
+    "href": "posts/27-11-2024/index.html#step-2.-environment-setup",
+    "title": "Downloading data from Scopus API",
+    "section": "Step 2. Environment setup",
+    "text": "Step 2. Environment setup\nNow it is time to make sure we have all the packages needed to download and process data. These are:\n\nhttr. Provides functions for working with HTTP requests and responses, making it easy to interact with web APIs\njsonlite. A package to parse, process and generate JSON data.\ntidyverse. A collection of R packages for data manipulation, visualization and analysis. Helps to organize and work with data retrieved from the API.\n\n\n# load libraries\nlibrary(httr)\nlibrary(jsonlite)\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.1     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.1\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter()  masks stats::filter()\n✖ purrr::flatten() masks jsonlite::flatten()\n✖ dplyr::lag()     masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nNext step is to store the API key in an .Renviron file. For this we first need to open the .Renviron file in RStudio:\n\nfile.edit(\"~/.Renviron\")\n\nAdd a new line to the file with this info:\n\nSCOPUS_API_KEY=your_api_key_here\n\nNow let’s try it works:\n\n# Retrieve API from .Renviron\napi_key &lt;- Sys.getenv(\"SCOPUS_API_KEY\")\n\n# Test API call to check validity of the key\nresponse &lt;- GET(\"https://api.elsevier.com/content/search/scopus\",\n                add_headers(\"X-ELS-APIKey\" = api_key),\n                query = list(query = \"AUTHOR-NAME(Robinson-Garcia)\", count = 1))\n\n# Check status\nif (status_code(response) == 200) {\n  print(\"API key is valid and working.\")\n} else {\n  print(paste(\"Error:\", status_code(response), \"Check your API key or access permissions.\"))\n}\n\n[1] \"API key is valid and working.\""
+  },
+  {
+    "objectID": "posts/27-11-2024/index.html#step-3.-reading-and-preparing-the-list-of-author-ids",
+    "href": "posts/27-11-2024/index.html#step-3.-reading-and-preparing-the-list-of-author-ids",
+    "title": "Downloading data from Scopus API",
+    "section": "Step 3. Reading and preparing the list of Author IDs",
+    "text": "Step 3. Reading and preparing the list of Author IDs\nIn my case I already have a list of publications with their author IDs per row. I want to work only with the Author IDs and clean it so that I have one by row in a vector for querying later on the API.\n\nlibrary(readr)     # For reading the CSV file\n\n# Step 1: Import the CSV file\n# Replace \"your_file.csv\" with your actual file path\ndata &lt;- read_csv(\"G:/Mi unidad/1. Work sync/Projects/z2025_01-SELECT/Contributions-inequalites/raw_data/contrib_data.csv\")\n\nRows: 675080 Columns: 29\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (7): doi, auid_list, affiliation_id_list, author_affiliation_mapping, s...\ndbl (22): Eid, Year, n_authors, source_id, CitationCount, DDR, DDA, SV_topic...\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n# Step 2: Extract and clean the 'auid_list' column\nauthor_ids &lt;- data %&gt;%\n  select(auid_list) %&gt;%               # Select the relevant column\n  separate_rows(auid_list, sep = \",\") %&gt;% # Split each row by commas\n  mutate(auid_list = str_trim(auid_list)) %&gt;% # Trim whitespace\n  distinct(auid_list) %&gt;%                 # Remove duplicate IDs\n  pull(auid_list)                         # Extract as a vector\n\n# Optional: Check the length of the vector\nlength(author_ids)\n\n[1] 2082499\n\n\nI end up with over 2M authors."
+  },
+  {
+    "objectID": "posts/27-11-2024/index.html#step-4.-query-the-api-for-metadata",
+    "href": "posts/27-11-2024/index.html#step-4.-query-the-api-for-metadata",
+    "title": "Downloading data from Scopus API",
+    "section": "Step 4. Query the API for metadata",
+    "text": "Step 4. Query the API for metadata\nLet’s create a function to download the data we want:\n\n# Function to query Scopus API for author metadata\nquery_author &lt;- function(author_id, api_key, output_dir = \"author_data\") {\n  # Ensure the output directory exists\n  if (!dir.exists(output_dir)) dir.create(output_dir)\n  \n  # Construct the API URL\n  url &lt;- paste0(\"https://api.elsevier.com/content/author/author_id/\", author_id)\n  \n  # Query the API\n  response &lt;- GET(url,\n                  add_headers(\"X-ELS-APIKey\" = api_key),\n                  query = list(httpAccept = \"application/json\"))\n  \n  if (status_code(response) == 200) {\n    # Parse the response content\n    content_raw &lt;- content(response, as = \"text\", encoding = \"UTF-8\")\n    content &lt;- fromJSON(content_raw)\n    \n    # Save to a JSON file\n    output_file &lt;- file.path(output_dir, paste0(author_id, \".json\"))\n    write_json(content, output_file, pretty = TRUE)\n    return(TRUE)  # Indicate success\n  } else {\n    # Log the error\n    print(paste(\"Error: Status code\", status_code(response), \"for author ID:\", author_id))\n    return(FALSE)  # Indicate failure\n  }\n}\n\nAnd now a test to see if everything works:\n\nau_data &lt;- query_author(\"36712349900\", api_key)\nprint(au_data)\n\n[1] TRUE"
+  },
+  {
+    "objectID": "posts/27-11-2024/index.html#step-4.-create-loop-and-download",
+    "href": "posts/27-11-2024/index.html#step-4.-create-loop-and-download",
+    "title": "Downloading data from Scopus API",
+    "section": "Step 4. Create loop and download",
+    "text": "Step 4. Create loop and download\n\n1. Create the Loop and Batch Logic\n\nImplement a loop to process author IDs in batches.\nWrite a function to distribute batches across API keys for parallel processing.\n\nSteps:\n\nSplit the full list of author IDs into manageable batches.\nAssign batches to available API keys, ensuring even distribution.\nProcess each batch sequentially or in parallel using the respective API key.\nSave the results incrementally as JSON files.\n\n\n\n2. Test the Code with a Small Dataset\n\nUse a sample dataset of 100 author IDs to validate the process before scaling up.\nUse 2 API keys for this test to confirm:\n\nBatch splitting and key assignment work correctly.\nParallelization works as expected.\nJSON files are saved correctly.\n\nTest and document the maximum batch size (e.g., 100, 500, 1000 IDs per batch) that can run smoothly without exceeding memory or rate limits.\n\n\n\n3. Execute the Parallel Download with 50 API Keys\n\nAfter validating the test, set up the full process to use 50 API keys for the entire dataset.\nEnsure:\n\nAPI keys are evenly distributed across batches.\nPauses are implemented between batches if necessary to comply with API rate limits.\nAll data is saved incrementally as JSON files.\n\n\n\n\nAdditional Notes\n\nAPI Key Management:\n\nConfirm that all 50 API keys are valid and have sufficient quotas (20,000 requests/week per key).\nMonitor usage during the process to avoid exceeding limits.\n\nError Handling:\n\nEnsure failed queries are logged (e.g., into an errors.csv file) for retries later.\n\nResuming Progress:\n\nInclude a mechanism to skip already processed IDs by checking for existing JSON files in the output directory.\n\n\n\n\nNext Steps Summary\n\nBatch Testing:\n\nTest batch size limits with a small dataset of 100 IDs using 2 API keys.\n\nParallel Processing:\n\nImplement parallel processing with 50 API keys and scale up for the full dataset.\n\nError Handling & Logs:\n\nLog any failed queries for retries later.\n\nData Storage:\n\nSave each author’s data as a JSON file incrementally."
   }
 ]

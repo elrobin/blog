@@ -1,0 +1,222 @@
+---
+title: "Downloading data from Scopus API"
+author: "N. Robinson-Garcia"
+date: "2024-11-27"
+toc: true
+categories: [coding]
+---
+
+This is a small tutorial on how to work with the Scopus API using R. Most bibliographic databases allow nowadays downloading bibliographic data through their API in an automated way if you are registered and have an institutional subscription. In many cases, they lack of a good documentation, this is not the case for Elsevier, who have quite a lot of info on how to work with their data.
+
+## Step 1. Setup API Access
+
+First thing you need to do is to go to the [Elsevier Developers Portal](https://dev.elsevier.com/) and request an API Key.
+
+![](images/elsevierdvs.png)
+
+When you request a key, it asks you to access through your institutional account and will register an API key under your profile.
+
+## Step 2. Environment setup
+
+Now it is time to make sure we have all the packages needed to download and process data. These are:
+
+-   `httr`. Provides functions for working with HTTP requests and responses, making it easy to interact with web APIs
+
+-   `jsonlite`. A package to parse, process and generate JSON data.
+
+-   `tidyverse`. A collection of R packages for data manipulation, visualization and analysis. Helps to organize and work with data retrieved from the API.
+
+```{r}
+# load libraries
+library(httr)
+library(jsonlite)
+library(tidyverse)
+```
+
+Next step is to store the API key in an `.Renviron` file. For this we first need to open the `.Renviron` file in RStudio:
+
+```{r}
+file.edit("~/.Renviron")
+```
+
+Add a new line to the file with this info:
+
+```{makefile}
+SCOPUS_API_KEY=your_api_key_here
+```
+
+Now let's try it works:
+
+```{r}
+
+# Retrieve API from .Renviron
+api_key <- Sys.getenv("SCOPUS_API_KEY")
+
+# Test API call to check validity of the key
+response <- GET("https://api.elsevier.com/content/search/scopus",
+                add_headers("X-ELS-APIKey" = api_key),
+                query = list(query = "AUTHOR-NAME(Robinson-Garcia)", count = 1))
+
+# Check status
+if (status_code(response) == 200) {
+  print("API key is valid and working.")
+} else {
+  print(paste("Error:", status_code(response), "Check your API key or access permissions."))
+}
+
+```
+
+## Step 3. Reading and preparing the list of Author IDs
+
+In my case I already have a list of publications with their author IDs per row. I want to work only with the Author IDs and clean it so that I have one by row in a vector for querying later on the API.
+
+```{r}
+library(readr)     # For reading the CSV file
+
+# Step 1: Import the CSV file
+# Replace "your_file.csv" with your actual file path
+data <- read_csv("G:/Mi unidad/1. Work sync/Projects/z2025_01-SELECT/Contributions-inequalites/raw_data/contrib_data.csv")
+
+# Step 2: Extract and clean the 'auid_list' column
+author_ids <- data %>%
+  select(auid_list) %>%               # Select the relevant column
+  separate_rows(auid_list, sep = ",") %>% # Split each row by commas
+  mutate(auid_list = str_trim(auid_list)) %>% # Trim whitespace
+  distinct(auid_list) %>%                 # Remove duplicate IDs
+  pull(auid_list)                         # Extract as a vector
+
+# Optional: Check the length of the vector
+length(author_ids)
+
+```
+
+I end up with over 2M authors.
+
+## Step 4. Query the API for metadata
+
+Let's create a function to download the data we want:
+
+```{r}
+
+# Function to query Scopus API for author metadata
+query_author <- function(author_id, api_key, output_dir = "author_data") {
+  # Ensure the output directory exists
+  if (!dir.exists(output_dir)) dir.create(output_dir)
+  
+  # Construct the API URL
+  url <- paste0("https://api.elsevier.com/content/author/author_id/", author_id)
+  
+  # Query the API
+  response <- GET(url,
+                  add_headers("X-ELS-APIKey" = api_key),
+                  query = list(httpAccept = "application/json"))
+  
+  if (status_code(response) == 200) {
+    # Parse the response content
+    content_raw <- content(response, as = "text", encoding = "UTF-8")
+    content <- fromJSON(content_raw)
+    
+    # Save to a JSON file
+    output_file <- file.path(output_dir, paste0(author_id, ".json"))
+    write_json(content, output_file, pretty = TRUE)
+    return(TRUE)  # Indicate success
+  } else {
+    # Log the error
+    print(paste("Error: Status code", status_code(response), "for author ID:", author_id))
+    return(FALSE)  # Indicate failure
+  }
+}
+
+
+```
+
+And now a test to see if everything works:
+
+```{r}
+
+au_data <- query_author("36712349900", api_key)
+print(au_data)
+
+```
+
+## Step 4. Create loop and download
+
+#### **1. Create the Loop and Batch Logic**
+
+-   Implement a loop to process **author IDs** in batches.
+
+-   Write a function to distribute **batches across API keys** for parallel processing.
+
+**Steps**:
+
+1.  Split the full list of author IDs into manageable batches.
+
+2.  Assign batches to available API keys, ensuring even distribution.
+
+3.  Process each batch sequentially or in parallel using the respective API key.
+
+4.  Save the results incrementally as JSON files.
+
+#### **2. Test the Code with a Small Dataset**
+
+-   Use a sample dataset of **100 author IDs** to validate the process before scaling up.
+
+-   Use **2 API keys** for this test to confirm:
+
+    -   Batch splitting and key assignment work correctly.
+
+    -   Parallelization works as expected.
+
+    -   JSON files are saved correctly.
+
+-   Test and document the maximum batch size (e.g., **100, 500, 1000 IDs per batch**) that can run smoothly without exceeding memory or rate limits.
+
+#### **3. Execute the Parallel Download with 50 API Keys**
+
+-   After validating the test, set up the full process to use **50 API keys** for the **entire dataset**.
+
+-   Ensure:
+
+    -   API keys are evenly distributed across batches.
+
+    -   Pauses are implemented between batches if necessary to comply with API rate limits.
+
+    -   All data is saved incrementally as JSON files.
+
+#### **Additional Notes**
+
+1.  **API Key Management**:
+
+    -   Confirm that all 50 API keys are valid and have sufficient quotas (20,000 requests/week per key).
+
+    -   Monitor usage during the process to avoid exceeding limits.
+
+2.  **Error Handling**:
+
+    -   Ensure failed queries are logged (e.g., into an `errors.csv` file) for retries later.
+
+3.  **Resuming Progress**:
+
+    -   Include a mechanism to skip already processed IDs by checking for existing JSON files in the output directory.
+
+### **Next Steps Summary**
+
+1.  **Batch Testing**:
+
+    -   Test batch size limits with a small dataset of **100 IDs** using **2 API keys**.
+
+2.  **Parallel Processing**:
+
+    -   Implement parallel processing with **50 API keys** and scale up for the full dataset.
+
+3.  **Error Handling & Logs**:
+
+    -   Log any failed queries for retries later.
+
+4.  **Data Storage**:
+
+    -   Save each author’s data as a JSON file incrementally.
+
+# Save final results
+
+write_csv(results, "scopus_author_data_final.csv")
