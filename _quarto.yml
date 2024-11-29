@@ -3,12 +3,12 @@ project:
   output-dir: docs
 
 website:
-  title: "Draft6_final3_rev_final.docx"
+  title: "Do not read"
   navbar:
     right:
       - text: "About"
         href: "https://elrobin.github.io/"
-
+    logo: images/privatesign.png
 format:
   html:
     theme: cosmo

@@ -1,1 +1,6 @@
 /* css styles */
+
+.navbar-brand img {
+  max-height: 50px; /* Ajusta el tamaño */
+  margin-right: 10px; /* Espaciado si es necesario */
+}
