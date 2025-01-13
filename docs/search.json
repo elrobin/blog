@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Do not read",
     "section": "",
-    "text": "Downloading data from Scopus API\n\n\n\n\n\n\ncoding\n\n\n\n\n\n\n\n\n\nNov 27, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\n\n\n\n\n\n\nMore on multiauthorship\n\n\n\n\n\n\nreviews\n\n\n\n\n\n\n\n\n\nNov 26, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\n\n\n\n\n\n\nScientific authorship and dealing with multiauthorship\n\n\n\n\n\n\nreviews\n\n\n\n\n\n\n\n\n\nNov 25, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\n\n\n\n\n\n\nHello world\n\n\n\n\n\n\ngibberish\n\n\n\n\n\n\n\n\n\nNov 24, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\nNo matching items"
+    "text": "Reading on African collaboration patterns\n\n\n\n\n\n\nreviews\n\n\n\n\n\n\n\n\n\nJan 13, 2025\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\n\n\n\n\n\n\nDownloading data from Scopus API\n\n\n\n\n\n\ncoding\n\n\n\n\n\n\n\n\n\nNov 27, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\n\n\n\n\n\n\nMore on multiauthorship\n\n\n\n\n\n\nreviews\n\n\n\n\n\n\n\n\n\nNov 26, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\n\n\n\n\n\n\nScientific authorship and dealing with multiauthorship\n\n\n\n\n\n\nreviews\n\n\n\n\n\n\n\n\n\nNov 25, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\n\n\n\n\n\n\nHello world\n\n\n\n\n\n\ngibberish\n\n\n\n\n\n\n\n\n\nNov 24, 2024\n\n\nN. Robinson-Garcia\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/26-11-2024/index.html",
@@ -75,5 +75,40 @@
     "title": "Downloading data from Scopus API",
     "section": "Step 4. Create loop and download",
     "text": "Step 4. Create loop and download\n\n1. Create the Loop and Batch Logic\n\nImplement a loop to process author IDs in batches.\nWrite a function to distribute batches across API keys for parallel processing.\n\nSteps:\n\nSplit the full list of author IDs into manageable batches.\nAssign batches to available API keys, ensuring even distribution.\nProcess each batch sequentially or in parallel using the respective API key.\nSave the results incrementally as JSON files.\n\n\n\n2. Test the Code with a Small Dataset\n\nUse a sample dataset of 100 author IDs to validate the process before scaling up.\nUse 2 API keys for this test to confirm:\n\nBatch splitting and key assignment work correctly.\nParallelization works as expected.\nJSON files are saved correctly.\n\nTest and document the maximum batch size (e.g., 100, 500, 1000 IDs per batch) that can run smoothly without exceeding memory or rate limits.\n\n\n\n3. Execute the Parallel Download with 50 API Keys\n\nAfter validating the test, set up the full process to use 50 API keys for the entire dataset.\nEnsure:\n\nAPI keys are evenly distributed across batches.\nPauses are implemented between batches if necessary to comply with API rate limits.\nAll data is saved incrementally as JSON files.\n\n\n\n\nAdditional Notes\n\nAPI Key Management:\n\nConfirm that all 50 API keys are valid and have sufficient quotas (20,000 requests/week per key).\nMonitor usage during the process to avoid exceeding limits.\n\nError Handling:\n\nEnsure failed queries are logged (e.g., into an errors.csv file) for retries later.\n\nResuming Progress:\n\nInclude a mechanism to skip already processed IDs by checking for existing JSON files in the output directory.\n\n\n\n\nNext Steps Summary\n\nBatch Testing:\n\nTest batch size limits with a small dataset of 100 IDs using 2 API keys.\n\nParallel Processing:\n\nImplement parallel processing with 50 API keys and scale up for the full dataset.\n\nError Handling & Logs:\n\nLog any failed queries for retries later.\n\nData Storage:\n\nSave each author’s data as a JSON file incrementally."
+  },
+  {
+    "objectID": "posts/13-01-2025/index.html",
+    "href": "posts/13-01-2025/index.html",
+    "title": "Reading on African collaboration patterns",
+    "section": "",
+    "text": "‘The Sleeping Sickness’ — American cartoon published in Puck magazine, 1911, showing European nations colonising Africa while a giant African man lies against a tree. Artist: Gordon Ross.\nHere some self-notes on my readings regarding African collaboration dynamics. I include the reference and some notes pointing at things relevant to the work I am doing right now and probably useless from everyone else 🙄."
+  },
+  {
+    "objectID": "posts/13-01-2025/index.html#inequalities",
+    "href": "posts/13-01-2025/index.html#inequalities",
+    "title": "Reading on African collaboration patterns",
+    "section": "Inequalities",
+    "text": "Inequalities\nHolmarsdottir, H. B., Desai, Z., Botha, L. R., Breidlid, A., Bastien, S., Mukoma, W., Ezekiel, M. J., Helleve, A., Farag, A. I., & Nomlomo, V. (2013). COMPARE Forum: The idea of North-South and South-South collaboration. Compare: A Journal of Comparative and International Education, 43(2), 265-286. https://doi.org/10.1080/03057925.2013.765274\nThe idea that North helps South is simplistic and unrealistic, there is growing awareness and concern on the need of African countries to reassert their own research agenda to foster innovation as well as to strengthen intra-regionald and south-south collaboration networks.\nThere is a difference between internationalising research and being involved in international cooperation networks as the former should look towards global and common aims while the latter can lead (and leads) to inequalities due to power dynamics."
+  },
+  {
+    "objectID": "posts/13-01-2025/index.html#general-patterns-and-use-of-indicators",
+    "href": "posts/13-01-2025/index.html#general-patterns-and-use-of-indicators",
+    "title": "Reading on African collaboration patterns",
+    "section": "General patterns and use of indicators",
+    "text": "General patterns and use of indicators\nConfraria, H., Mira Godinho, M., & Wang, L. (2017). Determinants of citation impact: A comparative analysis of the Global South versus the Global North. Research Policy, 46(1), 265-279. https://doi.org/10.1016/j.respol.2016.11.004\nConfraria, H., & Godinho, M. M. (2015). The impact of African science: A bibliometric analysis. Scientometrics, 102(2), 1241-1268. https://doi.org/10.1007/s11192-014-1463-8\nResearch in Africa has increased lately, although specialization seems to play a greater role in African countries as a triggering factor for impact.\nIn Confraria & Godinho (2015) there is an interesting discussion related to the adequacy of WoS to measure African output, although that is what they finally do."
+  },
+  {
+    "objectID": "posts/13-01-2025/index.html#factors-associated-with-scientific-workforce",
+    "href": "posts/13-01-2025/index.html#factors-associated-with-scientific-workforce",
+    "title": "Reading on African collaboration patterns",
+    "section": "Factors associated with scientific workforce",
+    "text": "Factors associated with scientific workforce\nEduan, W. (2019). Influence of study abroad factors on international research collaboration: Evidence from higher education academics in sub-Saharan Africa. Studies in Higher Education, 44(4), 774-785. https://doi.org/10.1080/03075079.2017.1401060\nMobility experience improves outcomes, but is dependent on the intensity of the experience (immersion programmes, internshipst, etc.).\nEl-Ouahi, J., Robinson-García, N., & Costas, R. (2021). Analyzing scientific mobility and collaboration in the Middle East and North Africa. Quantitative Science Studies, 2(3), 1023-1047. https://doi.org/10.1162/qss_a_00149\nEl-Ouahi, J., & Larivière, V. (2023). On the lack of women researchers in the Middle East and North Africa. Scientometrics, 128(8), 4321-4348. https://doi.org/10.1007/s11192-023-04768-5\nThese are studies focused on MENA countries disclosing regional mobility within the country and a disproportionate gender gap which affects career trajectories."
+  },
+  {
+    "objectID": "posts/13-01-2025/index.html#specific-studies-on-fields",
+    "href": "posts/13-01-2025/index.html#specific-studies-on-fields",
+    "title": "Reading on African collaboration patterns",
+    "section": "Specific studies on fields",
+    "text": "Specific studies on fields\nMaina, M. B., Ahmad, U., Ibrahim, H. A., Hamidu, S. K., Nasr, F. E., Salihu, A. T., Abushouk, A. I., Abdurrazak, M., Awadelkareem, M. A., Amin, A., Imam, A., Akinrinade, I. D., Yakubu, A. H., Azeez, I. A., Mohammed, Y. G., Adamu, A. A., Ibrahim, H. B., Bukar, A. M., Yaro, A. U., … Baden, T. (2021). Two decades of neuroscience publication trends in Africa. Nature Communications, 12(1), Article 1. https://doi.org/10.1038/s41467-021-23784-8\nIntra-regional collaboration seems to be close-distance collaboration, long distance collaboration is normally outside the continent. There is lack of research dependent on infrastructure (e.g., state-or-the-art equipment)."
   }
 ]
