@@ -3,7 +3,7 @@ title: "Exploring the social organization of the sciences"
 author: "N. Robinson-Garcia"
 date: "2025-05-23"
 toc: true
-categories: [conferences]
+categories: [talks]
 bibliography: references.bib
 ---
 
