@@ -1,7 +1,7 @@
 ---
 title: "El español como idioma científico y la evaluación"
 author: "N. Robinson-Garcia"
-date: "2025-10-21"
+date: "2025-11-17"
 categories: [talks]
 ---
 
@@ -14,5 +14,7 @@ La mesa redonda en la que participé estuvo moderada por Ana Gallego Cuiñas y t
 Os dejo más abajo mi presentación:
 
 ::: pdf-embed
-<iframe src="mesa2-jornadaespañol-nrg.pdf"></iframe>
+<iframe src="mesa2-jornadaespañol-nrg.pdf">
+
+</iframe>
 :::
